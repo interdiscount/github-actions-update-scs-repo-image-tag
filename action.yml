@@ -1,0 +1,29 @@
+name: 'Update the scs-repository'
+description: 'Update the scs-repository with the new helm chart version'
+inputs:
+  short-sha:
+    description: 'The short SHA value of the git commit'
+    required: true
+  scs-name:
+    description: 'The name of the scs'
+    required: true
+  service-name:
+    description: 'The name of the service to update'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Set up git config and update tag version in values
+      shell: bash
+      working-directory: scs
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+        wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+
+        yq write ${{ inputs.scs-name }}/values.yaml ${{ inputs.service-name }}.image.tag -i 1.0.0-sha${{ inputs.short-sha }}
+
+        git add "${{ inputs.scs-name }}/values.yaml"
+        git commit -m "Upgraded version of ${{ inputs.scs-name }} to 1.0.0-sha${{ inputs.short-sha }}"
+        git push
