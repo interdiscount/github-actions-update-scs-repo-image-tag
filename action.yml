@@ -20,9 +20,9 @@ runs:
         git config user.name "$GITHUB_ACTOR"
         git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-        wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+        wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 && chmod +x yq_linux_amd64
 
-        yq write ${{ inputs.scs-name }}/values.yaml ${{ inputs.service-name }}.image.tag -i 1.0.0-sha${{ inputs.short-sha }}
+        ./yq_linux_amd64 write ${{ inputs.scs-name }}/values.yaml ${{ inputs.service-name }}.image.tag -i 1.0.0-sha${{ inputs.short-sha }}
 
         git add "${{ inputs.scs-name }}/values.yaml"
         git commit -m "Upgraded version of ${{ inputs.scs-name }} to 1.0.0-sha${{ inputs.short-sha }}"
