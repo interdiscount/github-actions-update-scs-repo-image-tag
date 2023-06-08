@@ -20,7 +20,7 @@ runs:
         git config user.name "$GITHUB_ACTOR"
         git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-        wget https://github.com/mikefarah/yq/releases/download/v4.34.1/yq_linux_amd64 && chmod +x yq_linux_amd64
+        wget https://github.com/mikefarah/yq/releases/download/v4.14.1/yq_linux_amd64 && chmod +x yq_linux_amd64
 
         export IMAGE_TAG="sha-${{ inputs.short-sha }}"
         ./yq_linux_amd64 eval '.${{ inputs.service-name }}.image.tag = strenv(IMAGE_TAG)' -i ${{ inputs.scs-name }}/values.yaml
